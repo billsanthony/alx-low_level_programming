@@ -1,1 +1,2 @@
-0x12. C - Singly linked lists
+This folder contains task on stingly linked lists.
+
