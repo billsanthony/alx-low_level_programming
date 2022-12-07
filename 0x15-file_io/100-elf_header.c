@@ -1,8 +1,3 @@
-/*
- * File: 100-elf_header.c
- * Creator
- *
- */
 #include <elf.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -43,9 +38,7 @@ void check_elf(unsigned char *e_ident)
 			exit(98);
 		}
 	}
-
 }
-
 
 /**
  * print_magic - Prints the magic numbers of an ELF header.
@@ -118,7 +111,6 @@ void print_data(unsigned char *e_ident)
 	}
 }
 
-
 /**
  * print_version - Prints the version of an ELF header.
  * @e_ident: A pointer to an array containing the ELF version.
@@ -184,7 +176,56 @@ void print_osabi(unsigned char *e_ident)
 	}
 }
 
-unsigned char(*e_ident)
+/**
+ * print_abi - Prints the ABI version of an ELF header.
+ * @e_ident: A pointer to an array containing the ELF ABI version.
+ */
+void print_abi(unsigned char *e_ident)
+{
+	printf("  ABI Version:                       %d\n",
+	       e_ident[EI_ABIVERSION]);
+}
+
+/**
+ * print_type - Prints the type of an ELF header.
+ * @e_type: The ELF type.
+ * @e_ident: A pointer to an array containing the ELF class.
+ */
+void print_type(unsigned int e_type, unsigned char *e_ident)
+{
+	if (e_ident[EI_DATA] == ELFDATA2MSB)
+		e_type >>= 8;
+
+	printf("  Type:                              ");
+
+	switch (e_type)
+	{
+	case ET_NONE:
+		printf("NONE (None)\n");
+		break;
+	case ET_REL:
+		printf("REL (Relocatable file)\n");
+		break;
+	case ET_EXEC:
+		printf("EXEC (Executable file)\n");
+		break;
+	case ET_DYN:
+		printf("DYN (Shared object file)\n");
+		break;
+	case ET_CORE:
+		printf("CORE (Core file)\n");
+		break;
+	default:
+		printf("<unknown: %x>\n", e_type);
+	}
+}
+
+/**
+ * print_entry - Prints the entry point of an ELF header.
+ * @e_entry: The address of the ELF entry point.
+ * @e_ident: A pointer to an array containing the ELF class.
+ */
+void print_entry(unsigned long int e_entry, unsigned char *e_ident)
 {
 	printf("  Entry point address:               ");
 
@@ -217,7 +258,6 @@ void close_elf(int elf)
 		exit(98);
 	}
 }
-
 
 /**
  * main - Displays the information contained in the
@@ -272,9 +312,3 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 	close_elf(o);
 	return (0);
 }
-
-
-
-
-
-
